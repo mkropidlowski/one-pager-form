@@ -18,7 +18,7 @@
                 <p><span>Numer mieszkania:</span> {{ orderData.apartmentNumber }}</p>
                 <p><span>Kod pocztowy:</span> {{ orderData.postalCode }}</p>
                 <p><span>Miasto:</span> {{ orderData.city }}</p>
-                <p><span>Telefon:</span> {{ orderData.phone }}</p>
+                <p><span>Telefon:</span> {{ orderData.phoneNumber }}</p>
                 <p><span>Adres mailowy:</span> {{ orderData.email }}</p>
                 <p class="container__summaryBox__info-price"><span>Koszt zamówienia:</span> {{ totalPrice }} zł</p>
             </div>
@@ -135,7 +135,6 @@ export default {
             }
 
             &-price {
-
                 font-weight: bold;
                 padding: 10px;
                 color: $color-white;
