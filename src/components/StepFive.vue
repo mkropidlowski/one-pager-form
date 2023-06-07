@@ -1,22 +1,29 @@
 <template>
-    <div class="stepFiveBox__container">
-        <div class="stepFiveBox__container_header">
-            <h3 class="stepFiveBox__heading">Dziękujemy za złożenie zamówienia.</h3>
-            <button class="stepFiveBox__reloadButton" @click="reloadPage">Zamów ponownie</button>
+    <div class="container">
+        <div class="container__header">
+            <h3 class="container__heading">Dziękujemy za złożenie zamówienia.</h3>
+            <button class="container__reloadButton" @click="reloadPage">Zamów ponownie</button>
         </div>
-        <div class="stepFiveBox__summary">
-            <h2 class="stepFiveBox__summary__heading">Twoje dane: </h2>
-            <p><span>Imię:</span> {{ orderData.firstName }}</p>
-            <p><span>Nazwisko:</span> {{ orderData.lastName }}</p>
-            <p><span>Ulica:</span> {{ orderData.street }}</p>
-            <p><span>Numer budynku:</span> {{ orderData.buildingNumber }}</p>
-            <p><span>Numer mieszkania:</span> {{ orderData.apartmentNumber }}</p>
-            <p><span>Kod pocztowy:</span> {{ orderData.postalCode }}</p>
-            <p><span>Miasto:</span> {{ orderData.city }}</p>
-            <p><span>Telefon:</span> {{ orderData.phone }}</p>
-            <p><span>Adres mailowy:</span> {{ orderData.email }}</p>
-            <p class="stepFiveBox__summary__price"><span>Koszt zamówienia:</span> {{ totalPrice }} zł</p>
+        <div class="container__summaryBox">
+            <div class="container__summaryBox_image">
+                <img :src="tshirtImage" alt="T-shirt" width="350px" height="350px" class="image_tshirt-Type" />
+                <img :src="currentImage" alt="Wybrane zdjęcie" class="image_tshirt-Chosen" />
+            </div>
+            <div class="container__summaryBox__info">
+                <h2 class="container__summaryBox__info-heading">Twoje dane: </h2>
+                <p><span>Imię:</span> {{ orderData.firstName }}</p>
+                <p><span>Nazwisko:</span> {{ orderData.lastName }}</p>
+                <p><span>Ulica:</span> {{ orderData.street }}</p>
+                <p><span>Numer budynku:</span> {{ orderData.buildingNumber }}</p>
+                <p><span>Numer mieszkania:</span> {{ orderData.apartmentNumber }}</p>
+                <p><span>Kod pocztowy:</span> {{ orderData.postalCode }}</p>
+                <p><span>Miasto:</span> {{ orderData.city }}</p>
+                <p><span>Telefon:</span> {{ orderData.phone }}</p>
+                <p><span>Adres mailowy:</span> {{ orderData.email }}</p>
+                <p class="container__summaryBox__info-price"><span>Koszt zamówienia:</span> {{ totalPrice }} zł</p>
+            </div>
         </div>
+
     </div>
 </template>
   
@@ -32,6 +39,15 @@ export default {
         totalPrice: {
             type: Number,
         },
+        // eslint-disable-next-line vue/require-default-prop
+        tshirtImage: {
+            type: String,
+            required: true,
+        },
+        currentImage: {
+            type: String,
+            required: true
+        }
     },
     mounted() {
         console.log(this.orderData);
@@ -47,8 +63,8 @@ export default {
 <style scoped lang="scss">
 @import '../assets/variables.scss';
 
-.stepFiveBox__container {
-    &_header {
+.container {
+    &__header {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -57,9 +73,7 @@ export default {
         border-radius: 10px;
         background: whitesmoke;
     }
-}
 
-.stepFiveBox {
     &__heading {
         font-weight: bold;
     }
@@ -75,32 +89,63 @@ export default {
         cursor: pointer;
     }
 
-    &__summary {
+    &__summaryBox {
+        width: 800px;
         margin-top: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
 
-        p {
-            margin-top: 5px;
+        &_image {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            height: 380px;
 
-            span {
+            .image_tshirt-Type {
+                position: absolute;
+                z-index: -1;
+            }
+
+            .image_tshirt-Chosen {
+                position: absolute;
+                margin-top: 100px;
+                width: 120px;
+                height: 120px;
+            }
+
+        }
+
+        &__info {
+            width: 340px;
+
+            p {
+                margin-top: 5px;
+
+                span {
+                    font-weight: bold;
+                    padding: 3px;
+                }
+            }
+
+            &-heading {
                 font-weight: bold;
-                padding: 3px;
+                text-decoration: underline;
+                margin-bottom: 15px;
+            }
+
+            &-price {
+
+                font-weight: bold;
+                padding: 10px;
+                color: $color-white;
+                border-radius: 5px;
+                background: $color-light-green;
             }
         }
-
-        &__heading {
-            font-weight: bold;
-            text-decoration: underline;
-            margin-bottom: 15px;
-        }
-
-        &__price {
-            font-weight: bold;
-            padding: 10px;
-            color: $color-white;
-            border-radius: 5px;
-            background: $color-light-green;
-        }
     }
+
+
 }
 </style>
   

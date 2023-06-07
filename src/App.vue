@@ -13,7 +13,8 @@
 
             <StepFour v-if="currentStep === 4" :shirt-image="getShirtImage(printLocation)"
                 :current-image="getCurrentImage()" :inputs="getInputsData()" :total-price="calculateCost()" />
-            <StepFive v-if="currentStep === 5" :order-data="getOrderData()" :total-price="calculateCost()" />
+            <StepFive v-if="currentStep === 5" :order-data="getOrderData()" :total-price="calculateCost()"
+                :current-image="getCurrentImage()" :tshirt-image="getShirtImage(printLocation)" />
         </div>
 
         <div v-if="currentStep !== 5" :class="{ 'navigation__summary': currentStep === 4 }" class="navigation">
