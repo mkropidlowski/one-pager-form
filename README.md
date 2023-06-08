@@ -1,4 +1,5 @@
 ## App View:
+## YT live presentation: https://youtu.be/K5MEmnfCL-k
 
 Vue.js / SCSS 
 
