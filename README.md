@@ -1,6 +1,6 @@
 ## App View:
 ## YT live presentation: https://youtu.be/K5MEmnfCL-k
-
+## Live: https://glittering-gecko-260282.netlify.app/
 Vue.js / SCSS 
 
 
