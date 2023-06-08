@@ -1,4 +1,3 @@
- <!-- eslint-disable vue/v-on-event-hyphenation -->
 <template>
     <div class="container">
         <div class="container_components">
@@ -9,8 +8,7 @@
                 :current-image="getCurrentImage()" :tshirt-image="getShirtImage(printLocation)"
                 @previous-image="previousImage" @next-image="nextImage" @random-image="getRandomImage" />
             <StepThree v-if="currentStep === 3" ref="stepThree" :inputs="inputsMock" :order-data="getOrderData()"
-                @form-valid="handleFormValid" />
-
+                @form-valid="handleFormValid" @next-step="nextStep" />
             <StepFour v-if="currentStep === 4" :shirt-image="getShirtImage(printLocation)"
                 :current-image="getCurrentImage()" :inputs="getInputsData()" :total-price="calculateCost()" />
             <StepFive v-if="currentStep === 5" :order-data="getOrderData()" :total-price="calculateCost()"
@@ -18,10 +16,13 @@
         </div>
 
         <div v-if="currentStep !== 5" :class="{ 'navigation__summary': currentStep === 4 }" class="navigation">
-            <button :disabled="currentStep === 1" class="navigation__button" @click="previousStep">Wstecz</button>
-            <button v-if="currentStep === 4" class="order__button" @click="placeOrder">Złóż zamówienie</button>
-            <button v-else :disabled="currentStep === 4" class="navigation__button" @click="nextStep">Dalej</button>
+            <button :disabled="currentStep === 1" :class="{ 'navigation__customStep': currentStep === 3 }"
+                class="navigation__button" @click="previousStep">Wstecz</button>
+            <button v-if="currentStep === 4" class="navigation__order__button" @click="placeOrder">Złóż zamówienie</button>
+            <button v-else-if="currentStep !== 3" :disabled="currentStep === 4" class="navigation__button"
+                @click="nextStep">Dalej</button>
         </div>
+
     </div>
 </template>
   
@@ -45,7 +46,8 @@ export default {
             inputsMock: [],
             frontTshirtPic: frontTshirt,
             backTshirtPic: backTshirt,
-            isStepThreeFormValid: false
+            isStepThreeFormValid: false,
+            isNextStepInProgress: false
         };
     },
 
@@ -56,14 +58,24 @@ export default {
 
     methods: {
         nextStep() {
+            if (this.isNextStepInProgress) {
+                return;
+            }
+
             if (this.currentStep === 3) {
                 const isFormValid = this.$refs.stepThree.isFormValid();
                 if (!isFormValid) {
                     return;
                 }
             }
-            this.currentStep++;
+            this.isNextStepInProgress = true;
+
+            this.$nextTick(() => {
+                this.currentStep++;
+                this.isNextStepInProgress = false;
+            });
         },
+
         previousStep() {
             this.currentStep--;
         },
@@ -115,15 +127,15 @@ export default {
 
         generateInputsData() {
             this.inputsMock = [
-                { id: 'firstName', value: '', label: 'Imię', valid: true },
-                { id: 'lastName', value: '', label: 'Nazwisko', valid: true },
-                { id: 'street', value: '', label: 'Ulica', valid: true },
-                { id: 'buildingNumber', value: '', label: 'Numer budynku', valid: true },
-                { id: 'apartmentNumber', value: '', label: 'Numer mieszkania', valid: true, required: false },
-                { id: 'postalCode', value: '', label: 'Kod pocztowy', valid: true },
-                { id: 'city', value: '', label: 'Miasto', valid: true },
-                { id: 'email', value: '', label: 'Email', valid: true },
-                { id: 'phoneNumber', value: '', label: 'Numer telefonu', valid: true }
+                { id: 'firstName', value: '', label: 'Imię', valid: true, error: false, errorMessage: 'Pole imię jest puste!' },
+                { id: 'lastName', value: '', label: 'Nazwisko', valid: true, error: false, errorMessage: 'Pole nazwisko jest puste!' },
+                { id: 'street', value: '', label: 'Ulica', valid: true, error: false, errorMessage: 'Pole Ulica jest puste!' },
+                { id: 'buildingNumber', value: '', label: 'Numer budynku', valid: true, error: false, errorMessage: 'Pole numer budynku jest puste!' },
+                { id: 'apartmentNumber', value: '', label: 'Numer mieszkania', valid: true, required: false, error: false, errorMessage: 'Pole numer mieszkania jest puste!' },
+                { id: 'postalCode', value: '', label: 'Kod pocztowy', valid: true, error: false, errorMessage: 'Pole kod pocztowy jest puste!' },
+                { id: 'city', value: '', label: 'Miasto', valid: true, error: false, errorMessage: 'Pole miasto jest puste!' },
+                { id: 'email', value: '', label: 'Email', valid: true, error: false, errorMessage: 'Pole e-mail jest puste!' },
+                { id: 'phoneNumber', value: '', label: 'Numer telefonu', valid: true, error: false, errorMessage: 'Pole numer telefonu jest puste!' }
             ];
         },
 
@@ -155,7 +167,7 @@ export default {
     },
 };
 </script>
-
+  
 <style scoped lang="scss">
 @import './assets/variables.scss';
 
@@ -174,7 +186,18 @@ export default {
         display: flex;
         gap: 20px;
 
+        &__order__button {
+            background: $color-green;
+            padding: 10px;
+            color: $color-white;
+            font-weight: bold;
+            border: 0;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
         &__button {
+            width: 80px;
             background: $color-orange;
             padding: 10px;
             color: $color-white;
@@ -188,19 +211,13 @@ export default {
     .navigation__summary {
         position: relative;
         left: 115px;
+    }
 
-        .order__button {
-            background: $color-green;
-            padding: 10px;
-            color: $color-white;
-            font-weight: bold;
-            border: 0;
-            border-radius: 10px;
-            cursor: pointer;
-        }
+    .navigation__customStep {
+        position: relative;
+        top: -80px;
     }
 
 }
 </style>
   
-        
